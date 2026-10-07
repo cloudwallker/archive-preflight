@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+*.spec
+fixtures/generated/
+/fixtures/synthetic/*.zip
+demo-output/
+.cache/
+.pytest_cache/
+node_modules/
+.env
+.env.*
+!.env.example
+.archive-preflight-local/

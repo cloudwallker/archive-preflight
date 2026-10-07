@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "eightRiskCategories": [
+    "case",
+    "reserved",
+    "trailing",
+    "normalization",
+    "path-budget",
+    "traversal",
+    "symlink",
+    "declared-ratio"
+  ],
+  "safeContent": {
+    "stored.txt": "original stored\n",
+    "empty": "",
+    "Dir/caf\u00e9.txt": "original unicode\n"
+  },
+  "malformedContentMustFail": [
+    "content-local-name.zip",
+    "content-local-flags.zip",
+    "content-overlap.zip",
+    "content-bad-crc.zip",
+    "content-truncated.zip",
+    "content-low-declared.zip",
+    "content-tail-junk.zip",
+    "content-descriptor.zip"
+  ],
+  "limitsAreRuntimeTests": [
+    "node-limit",
+    "mid-scan-source-change"
+  ],
+  "files": {
+    "demo-eight-risks.zip": {
+      "bytes": 1764,
+      "sha256": "cccf7838b70a9ad0360137bebd3a508e0ba9054d03bc025d6915343e357e67e5",
+      "synthetic": true
+    },
+    "encoding-mixed.zip": {
+      "bytes": 638,
+      "sha256": "7dfbec15512856d7ed6cbeb88c30c88d2451e3839632a58367552b27d103e6b6",
+      "synthetic": true
+    },
+    "tree-collisions.zip": {
+      "bytes": 700,
+      "sha256": "419c7984165fbe3c71c97da3e7db70769897b6d817cbce38c154bafacc987e5a",
+      "synthetic": true
+    },
+    "nonstandard-paths.zip": {
+      "bytes": 1035,
+      "sha256": "e93cebba6d11102c6dd005eb6e57c198f0799bf897877ded3106965980c804bd",
+      "synthetic": true
+    },
+    "bounds-central-declaration.zip": {
+      "bytes": 101,
+      "sha256": "e29f0a5982da810eb9da63c703b33a00a088ed41db7ddd96f473f43a43ff72a1",
+      "synthetic": true
+    },
+    "bounds-eocd-ambiguous.zip": {
+      "bytes": 44,
+      "sha256": "0a2710002fcb8357d8e3c8bb9e2bcaa1f9fb9271b0fa85bd8e70ec9c0c03cf6e",
+      "synthetic": true
+    },
+    "bounds-zip64-missing.zip": {
+      "bytes": 205,
+      "sha256": "6e7e75d48f1772b81a2558aa7bd819b35700b77fa6f9ebfbccac3f2e01e51757",
+      "synthetic": true
+    },
+    "bounds-depth.zip": {
+      "bytes": 361,
+      "sha256": "010532747b6a70d6aa834814906a19e8bde498ea26f09c102e6c89282fd7f565",
+      "synthetic": true
+    },
+    "content-local-name.zip": {
+      "bytes": 107,
+      "sha256": "5e7cd41d0875ba2feab8b2d33fb76376517479eea1c9b38a29791e7e70fbf8b5",
+      "synthetic": true
+    },
+    "content-local-flags.zip": {
+      "bytes": 107,
+      "sha256": "2349bb546a391e65d4b63ac03b4416a6a5d79420682087323940edb6674ed112",
+      "synthetic": true
+    },
+    "content-overlap.zip": {
+      "bytes": 180,
+      "sha256": "837799118622eaaae93375759e279afadf4565758bb66bf90066f0f317364a67",
+      "synthetic": true
+    },
+    "content-bad-crc.zip": {
+      "bytes": 107,
+      "sha256": "2488d9e3f92b295218811ffa1f9162ad4719d90080b76cce2e8b3ad9347e5551",
+      "synthetic": true
+    },
+    "content-truncated.zip": {
+      "bytes": 106,
+      "sha256": "3a4cba241e33a66422f0fbacdaa3ff3c0a381712a8111550db04d402fb7128a2",
+      "synthetic": true
+    },
+    "content-low-declared.zip": {
+      "bytes": 179,
+      "sha256": "b50cc5c1e9bc9167509982ecb576009ad414e340a394f98a0d1ed7830083d0eb",
+      "synthetic": true
+    },
+    "content-tail-junk.zip": {
+      "bytes": 111,
+      "sha256": "428a787dc7225d787914c08b830958554141333a6120062651a653f75736b77b",
+      "synthetic": true
+    },
+    "content-descriptor.zip": {
+      "bytes": 123,
+      "sha256": "cc1bd539049e07c9e5703f67f209abb13fa57e92c92f742c27cf7b68015e35e1",
+      "synthetic": true
+    },
+    "safe-extract.zip": {
+      "bytes": 729,
+      "sha256": "aff9e34e814e54c495f54fb3de3495cb8c0f1569e148568b94bf7db4ee4a3ca4",
+      "synthetic": true
+    },
+    "report-injection.zip": {
+      "bytes": 476,
+      "sha256": "48a621611993585a8125d7cdd9f3f751544fdbbae31d5be502bf990c1454a0d3",
+      "synthetic": true
+    }
+  }
+}

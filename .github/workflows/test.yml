@@ -1,0 +1,26 @@
+name: Test source and build Windows
+on: [push, pull_request]
+jobs:
+  source:
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install .
+      - run: python -m unittest discover -v
+      - run: python fixtures/build_fixtures.py --output fixtures/generated
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --require-hashes -r requirements-build.txt
+      - run: python scripts/build_windows.py
+      - run: dist/archive-preflight.exe --version

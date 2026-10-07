@@ -1,0 +1,153 @@
+{
+  "scope": "Windows x64 reference runtime used by this build; complete signed hashes retained separately from official unsigned PE images.",
+  "runtimeRelease": "20260825",
+  "python": "3.12.14",
+  "officialFullArchive": {
+    "name": "cpython-3.12.14+20260825-x86_64-pc-windows-msvc-pgo-full.tar.zst",
+    "size": 43500970,
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260825/cpython-3.12.14%2B20260825-x86_64-pc-windows-msvc-pgo-full.tar.zst",
+    "digest": "sha256:b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+  },
+  "officialStrippedArchive": {
+    "name": "cpython-3.12.14+20260825-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+    "size": 21980002,
+    "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20260825/cpython-3.12.14%2B20260825-x86_64-pc-windows-msvc-install_only_stripped.tar.gz",
+    "digest": "sha256:8e6aad12ef6fc9685e67ce66253f8f72d6e8fa02cb7187e5850bd4db5ecd9e2a"
+  },
+  "signature": {
+    "publisher": "OpenAI OpCo, LLC",
+    "status": "Valid (Windows Authenticode)",
+    "wholeFileHashesEqualToUnsigned": false
+  },
+  "PEComparison": "Exact stripped-image bytes after clearing checksum, certificate directory and appended certificate; no code sections excluded.",
+  "components": [
+    {
+      "name": "OpenSSL",
+      "version": "3.5.8",
+      "source": "https://github.com/openssl/openssl/tree/openssl-3.5.8",
+      "members": [
+        "libcrypto-3-x64.dll",
+        "libssl-3-x64.dll",
+        "_hashlib.pyd",
+        "_ssl.pyd"
+      ],
+      "license": "licenses/OpenSSL/LICENSE.txt"
+    },
+    {
+      "name": "libffi",
+      "version": "3.4.2 (CPython Windows fork)",
+      "source": "https://github.com/python/cpython-source-deps/tree/16fad4855b3d8c03b5910e405ff3a04395b39a98",
+      "buildPin": "https://github.com/astral-sh/python-build-standalone/blob/20260825/cpython-windows/build.py#L911-L949",
+      "members": [
+        "libffi-8.dll",
+        "_ctypes.pyd"
+      ],
+      "license": "licenses/libffi/LICENSE.txt"
+    }
+  ],
+  "signedDLLAndExtensionHashes": [
+    {
+      "name": "libcrypto-3-x64.dll",
+      "bytes": 8003376,
+      "sha256": "35e0ae43af2876903b00ba955e400f6da1787defb1ba18b7ff35e540c7f4ed66",
+      "officialBytesEqual": false,
+      "officialUnsignedSHA256": "8b54c7df707f1fbd046b2520250dc84a43d3cb90261210a3f2f4eaca239bd0f7",
+      "PEImageEqualExcludingSigningMetadata": true,
+      "normalizedImageSHA256": "8b54c7df707f1fbd046b2520250dc84a43d3cb90261210a3f2f4eaca239bd0f7"
+    },
+    {
+      "name": "libssl-3-x64.dll",
+      "bytes": 1599280,
+      "sha256": "5bb445df170ac3df4524cd1f7edbad09bb249b77d1144f58ebd1615f730d162e",
+      "officialBytesEqual": false,
+      "officialUnsignedSHA256": "77cb95d0ee83f8f0c3ddbc4cea6173140b50b74d4b28873091a5c00d8653219f",
+      "PEImageEqualExcludingSigningMetadata": true,
+      "normalizedImageSHA256": "77cb95d0ee83f8f0c3ddbc4cea6173140b50b74d4b28873091a5c00d8653219f"
+    },
+    {
+      "name": "libffi-8.dll",
+      "bytes": 43824,
+      "sha256": "34985fc0a2d5942dd6c0cf3205549dc56ed6ebef410884419c87e5fe4e00e988",
+      "officialBytesEqual": false,
+      "officialUnsignedSHA256": "78ec2d41bbc7bc9bcaf3b58a9cacc9efa1f53b2780fc33f4cb2e6e09d790c99c",
+      "PEImageEqualExcludingSigningMetadata": true,
+      "normalizedImageSHA256": "78ec2d41bbc7bc9bcaf3b58a9cacc9efa1f53b2780fc33f4cb2e6e09d790c99c"
+    },
+    {
+      "name": "_hashlib.pyd",
+      "bytes": 70448,
+      "sha256": "d99963665f72156067b432753d153ea456d0a0fa49d235c9b61bdb0a0d372ba4",
+      "officialBytesEqual": false,
+      "officialUnsignedSHA256": "e8ed80ac9a5023657f485d2113aace9cd327e9a26116519664096d46850244b7",
+      "PEImageEqualExcludingSigningMetadata": true,
+      "normalizedImageSHA256": "e8ed80ac9a5023657f485d2113aace9cd327e9a26116519664096d46850244b7"
+    },
+    {
+      "name": "_ssl.pyd",
+      "bytes": 180528,
+      "sha256": "d71677bb53df30a58510d0985174132f12374207310aa4895d8a6b8b8fcc66a3",
+      "officialBytesEqual": false,
+      "officialUnsignedSHA256": "8db3ba65f76cb5fe192cfbe6bc4486ce25555d919ac7b29aaf2531f99412e3ae",
+      "PEImageEqualExcludingSigningMetadata": true,
+      "normalizedImageSHA256": "8db3ba65f76cb5fe192cfbe6bc4486ce25555d919ac7b29aaf2531f99412e3ae"
+    }
+  ],
+  "additionalNativeLicenseCoverage": {
+    "_bz2.pyd": "licenses/bzip2/LICENSE.txt",
+    "_lzma.pyd": "licenses/liblzma/LICENSE.txt",
+    "_decimal.pyd": "licenses/mpdecimal/LICENSE.txt",
+    "pyexpat.pyd": "licenses/expat/LICENSE.txt",
+    "python312.dll built-in zlib": "licenses/zlib/LICENSE.txt"
+  },
+  "licenseFiles": [
+    {
+      "path": "licenses/OpenSSL/LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/openssl/openssl/openssl-3.5.8/LICENSE.txt",
+      "bytes": 10175,
+      "sha256": "7d5450cb2d142651b8afa315b5f238efc805dad827d91ba367d8516bc9d49e7a",
+      "lengthVerifiedBeforeDownload": true
+    },
+    {
+      "path": "licenses/libffi/LICENSE.txt",
+      "source": "https://raw.githubusercontent.com/python/cpython-source-deps/16fad4855b3d8c03b5910e405ff3a04395b39a98/LICENSE",
+      "bytes": 1132,
+      "sha256": "a61d06e8f7be57928e71e800eb9273b05cb8868c484108afe41e4305bb320dde",
+      "lengthVerifiedBeforeDownload": true
+    },
+    {
+      "path": "licenses/bzip2/LICENSE.txt",
+      "source": "Verified 20260825 official full distribution: python/licenses/LICENSE.bzip2.txt",
+      "bytes": 1780,
+      "sha256": "bd5628cc76fb0ebf9c657d1dd4d1a240a1a7b216c31663e7bbf1131c0b70a910",
+      "officialArtifactSHA256": "b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+    },
+    {
+      "path": "licenses/liblzma/LICENSE.txt",
+      "source": "Verified 20260825 official full distribution: python/licenses/LICENSE.liblzma.txt",
+      "bytes": 673,
+      "sha256": "d87d218dd908b3243ec4cbc72af400e5b7437513ea9d9229291d0812b8464fec",
+      "officialArtifactSHA256": "b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+    },
+    {
+      "path": "licenses/mpdecimal/LICENSE.txt",
+      "source": "Verified 20260825 official full distribution: python/licenses/LICENSE.mpdecimal.txt",
+      "bytes": 1308,
+      "sha256": "f094277cd46e1f6e4d87916cc4b51e22f613d45eb81f48231c3cb7caf8fc8a6a",
+      "officialArtifactSHA256": "b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+    },
+    {
+      "path": "licenses/expat/LICENSE.txt",
+      "source": "Verified 20260825 official full distribution: python/licenses/LICENSE.expat.txt",
+      "bytes": 1165,
+      "sha256": "8a9cfe4b5924f4b25881aa0c9f5e4561c5f31065d0c4a13cdcdbcf917edf39aa",
+      "officialArtifactSHA256": "b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+    },
+    {
+      "path": "licenses/zlib/LICENSE.txt",
+      "source": "Verified 20260825 official full distribution: python/licenses/LICENSE.zlib.txt",
+      "bytes": 1016,
+      "sha256": "365e36720db366054863235aea5d6f440142ab968834bfaf81fa9d187c99b9b8",
+      "officialArtifactSHA256": "b18a69914dff8aa4541adf40579e0aea3233ad3dad5aba2d90a9e179dcf44489"
+    }
+  ]
+}

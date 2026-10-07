@@ -1,0 +1,7 @@
+{
+  "name": "archive-preflight-browser-checks",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {"test:browser": "node tests/report.browser.cjs"},
+  "devDependencies": {"playwright": "1.58.2"}
+}

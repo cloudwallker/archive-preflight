@@ -1,0 +1,9 @@
+include LICENSE README.md README_ZH.md CHANGELOG.md CONTRIBUTING.md THIRD_PARTY_NOTICES.md
+recursive-include src/archive_preflight/assets *.js *.css
+recursive-include schemas *.json
+recursive-include fixtures *.py *.json
+recursive-include tests *.py
+recursive-include scripts *.py
+recursive-include licenses *
+include requirements-build.txt
+recursive-include docs *.md

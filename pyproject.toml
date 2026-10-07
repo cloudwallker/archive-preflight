@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "archive-preflight"
+version = "0.1.0"
+description = "Offline ZIP filename preflight, editable naming plans and bounded verified extraction"
+readme = "README.md"
+authors = [{name = "cloudwallker"}]
+requires-python = ">=3.12"
+dependencies = []
+license = "MIT"
+
+[project.scripts]
+archive-preflight = "archive_preflight.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+archive_preflight = ["assets/*.js", "assets/*.css"]

@@ -1,0 +1,317 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$ref": "#/$defs/ExtractionResult",
+  "$defs": {
+    "ExtractionResult": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "verified",
+            "failed",
+            "unsupported_host"
+          ]
+        },
+        "planId": {
+          "type": "string"
+        },
+        "archiveId": {
+          "type": "string"
+        },
+        "hostBackend": {
+          "type": "string"
+        },
+        "actualFiles": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actualDirectories": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "actualBytes": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]*)(?![\\s\\S])"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "entries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/WrittenEntry"
+          }
+        },
+        "skippedEntryIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        },
+        "cleanup": {
+          "$ref": "#/$defs/CleanupResult"
+        },
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1
+        }
+      },
+      "required": [
+        "status",
+        "planId",
+        "archiveId",
+        "hostBackend",
+        "actualFiles",
+        "actualDirectories",
+        "actualBytes",
+        "entries",
+        "skippedEntryIds",
+        "diagnostics",
+        "cleanup",
+        "schemaVersion"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "verified"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "actualFiles": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "actualDirectories": {
+                "not": {
+                  "type": "null"
+                }
+              },
+              "actualBytes": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "anyOf": [
+              {
+                "properties": {
+                  "actualFiles": {
+                    "type": "null"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "actualDirectories": {
+                    "type": "null"
+                  }
+                }
+              },
+              {
+                "properties": {
+                  "actualBytes": {
+                    "type": "null"
+                  }
+                }
+              }
+            ]
+          },
+          "then": {
+            "properties": {
+              "actualFiles": {
+                "type": "null"
+              },
+              "actualDirectories": {
+                "type": "null"
+              },
+              "actualBytes": {
+                "type": "null"
+              },
+              "diagnostics": {
+                "contains": {
+                  "properties": {
+                    "code": {
+                      "const": "ACTUAL_COUNTS_UNAVAILABLE"
+                    }
+                  },
+                  "required": [
+                    "code"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "WrittenEntry": {
+      "type": "object",
+      "properties": {
+        "entryId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "targetPath": {
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "file",
+            "directory"
+          ]
+        },
+        "size": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]*)(?![\\s\\S])"
+        },
+        "crc32": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 0
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "entryId",
+        "targetPath",
+        "kind",
+        "size",
+        "crc32",
+        "sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Diagnostic": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "severity": {
+          "enum": [
+            "info",
+            "warning",
+            "error"
+          ]
+        },
+        "entryIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "certainty": {
+          "enum": [
+            "config_rule",
+            "approximation",
+            "advisory"
+          ]
+        }
+      },
+      "required": [
+        "code",
+        "severity",
+        "entryIds",
+        "details",
+        "certainty"
+      ],
+      "additionalProperties": false
+    },
+    "CleanupResult": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "not_created",
+            "removed",
+            "retained_ownership_unknown",
+            "cleanup_failed",
+            "not_needed"
+          ]
+        },
+        "removedFiles": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "removedDirectories": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "diagnostics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Diagnostic"
+          }
+        }
+      },
+      "required": [
+        "state",
+        "removedFiles",
+        "removedDirectories",
+        "diagnostics"
+      ],
+      "additionalProperties": false
+    }
+  }
+}
