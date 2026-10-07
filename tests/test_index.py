@@ -235,6 +235,30 @@ class IndexTests(unittest.TestCase):
             result = self.scan(make_zip([], zip64=z64))
             self.assertEqual(result.structure_state, 'ok')
 
+    def test_metadata_view_rejects_negative_seek_without_moving(self):
+        self.api()
+        source = io.BytesIO(make_zip([]))
+        view = self.mod._MetadataView(source, 22, ((0, 22),))
+        view.seek(5)
+        for offset, whence in ((-1, 0), (-6, 1), (-23, 2)):
+            with self.subTest(offset=offset, whence=whence):
+                with self.assertRaises(OSError):
+                    view.seek(offset, whence)
+                self.assertEqual(view.tell(), 5)
+
+    def test_empty_archive_accepts_legacy_stdlib_negative_zip64_probe(self):
+        self.api()
+        def probe(source, offset, endrec):
+            try:
+                source.seek(-42, 2)
+            except OSError:
+                return endrec
+            source.read(20)
+            return endrec
+        with patch.object(zipfile, '_EndRecData64', probe):
+            result = self.scan(make_zip([]))
+        self.assertEqual(result.structure_state, 'ok')
+
     def test_modified_source_overrides_parse_failure(self):
         self.api()
         original, changed = self.mod._read_at, False

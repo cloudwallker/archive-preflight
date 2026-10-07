@@ -88,7 +88,12 @@ class _MetadataView(io.RawIOBase):
         self.source, self.length, self.regions, self.pos = source, length, regions, 0
 
     def seek(self, offset, whence=0):
-        self.pos = offset if whence == 0 else (self.pos if whence == 1 else self.length) + offset
+        position = offset if whence == 0 else (self.pos if whence == 1 else self.length) + offset
+        if position < 0:
+            # Older zipfile versions probe before the start of an empty ZIP
+            # and catch the normal file API's OSError to rule out ZIP64.
+            raise OSError('Negative seek position')
+        self.pos = position
         return self.pos
 
     def tell(self):
