@@ -20,7 +20,7 @@ Python 3.12 or newer, standard-library runtime, no runtime package dependencies:
 
 ```sh
 python -m pip install .
-archive-preflight demo --output demo-output
+archive-preflight demo --output demo-output --locale en
 ```
 
 Open `demo-output/report.html`. Search entries, inspect byte and candidate evidence, choose keep/rename/skip, and export a naming draft. The demo includes case collisions, reserved names, trailing dots, NFC/NFD names, a long path, traversal, a Unix link, and a highly compressible file. Its four policy JSON reports explain configuration differences. Exit 1 is expected for findings.
@@ -29,7 +29,7 @@ For your own ZIP:
 
 ```sh
 mkdir .archive-preflight-local
-archive-preflight inspect sample.zip --target windows --target-root X:/delivery --html .archive-preflight-local/report.html --report-json .archive-preflight-local/report.json --plan .archive-preflight-local/draft.json
+archive-preflight inspect sample.zip --target windows --target-root X:/delivery --locale en --html .archive-preflight-local/report.html --report-json .archive-preflight-local/report.json --plan .archive-preflight-local/draft.json
 archive-preflight validate-plan sample.zip --mapping .archive-preflight-local/reviewed-draft.json --output .archive-preflight-local/validated.json
 archive-preflight extract sample.zip --plan .archive-preflight-local/validated.json --accept-plan PLAN_ID_FROM_VALIDATED_JSON --output .archive-preflight-local/new-output --result-json .archive-preflight-local/result.json
 ```

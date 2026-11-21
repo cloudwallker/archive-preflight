@@ -53,6 +53,7 @@ def _parser():
     demo=commands.add_parser('demo',help='生成真实八类风险示例及离线报告')
     demo.add_argument('--output',type=Path,required=True)
     demo.add_argument('--target',default='windows')
+    demo.add_argument('--locale', choices=('zh-CN', 'en'), default='zh-CN')
     return parser
 
 
@@ -175,8 +176,11 @@ def _demo(args):
         if profile_id==profile.profile_id:primary=response
     _write_new(args.output/'report.json',primary['report_text'])
     _write_new(args.output/'draft.json',primary['draft_text'])
-    _write_new(args.output/'report.html',render_html(primary['report'],loads_mapping(primary['draft_text']),'zh-CN'))
-    print('示例已生成；报告和映射草稿请本地审阅，再运行 validate-plan。')
+    _write_new(args.output/'report.html',render_html(primary['report'],loads_mapping(primary['draft_text']),args.locale))
+    if args.locale == 'en':
+        print('Demo generated. Review the report and naming draft locally, then run validate-plan.')
+    else:
+        print('示例已生成；报告和映射草稿请本地审阅，再运行 validate-plan。')
     return _scan_exit(primary['report'])
 
 

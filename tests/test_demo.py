@@ -64,6 +64,30 @@ class DemoTests(unittest.TestCase):
             before={p.name:p.read_bytes() for p in out.iterdir()}
             self.assertEqual(run().returncode,2)
             self.assertEqual({p.name:p.read_bytes() for p in out.iterdir()},before)
+
+    def test_demo_locale_selects_report_language_without_changing_json(self):
+        with tempfile.TemporaryDirectory(dir=Path.cwd()) as tmp:
+            root = Path(tmp)
+            default, english = root / 'default', root / 'english'
+            args = [sys.executable, '-B', '-X', 'utf8', '-m', 'archive_preflight', 'demo']
+            original = subprocess.run(args + ['--output', str(default)],
+                                      capture_output=True, encoding='utf-8', timeout=30)
+            localized = subprocess.run(args + ['--output', str(english), '--locale', 'en'],
+                                       capture_output=True, encoding='utf-8', timeout=30)
+            self.assertEqual(original.returncode, 1, original.stderr)
+            self.assertEqual(localized.returncode, 1, localized.stderr)
+            self.assertIn('Demo generated.', localized.stdout)
+            self.assertIn('<html lang="zh-CN">', (default / 'report.html').read_text('utf-8'))
+            english_html = (english / 'report.html').read_text('utf-8')
+            self.assertIn('<html lang="en">', english_html)
+            self.assertIn('<title>ZIP name review', english_html)
+            json_names = {path.name for path in default.glob('*.json')}
+            self.assertTrue({'report.json', 'draft.json'} <= json_names)
+            self.assertEqual({path.name for path in english.glob('*.json')}, json_names)
+            for name in sorted(json_names):
+                with self.subTest(file=name):
+                    self.assertEqual((english / name).read_bytes(), (default / name).read_bytes())
+
     def test_inspect_html_is_exclusive_and_json_stdout_stays_json(self):
         from tests.helpers_zip import make_zip
         with tempfile.TemporaryDirectory(dir=Path.cwd()) as tmp:
