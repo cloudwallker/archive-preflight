@@ -23,7 +23,7 @@ python -m pip install .
 archive-preflight demo --output demo-output
 ```
 
-打开 `demo-output/report.html`，搜索条目、查看字节与候选证据、编辑 keep/rename/skip 并导出草稿。演示包含大小写碰撞、保留名、尾点、NFC/NFD、深路径预算、父目录跳转、Unix 链接和高声明压缩比八类风险；四份配置 JSON 展示规则差异。发现风险时退出码 1 是正常结果。
+打开 `demo-output/report.html`，搜索条目、查看字节与候选证据、编辑 keep/rename/skip 并导出草稿。可加 `--locale en` 生成英文演示报告。演示包含大小写碰撞、保留名、尾点、NFC/NFD、深路径预算、父目录跳转、Unix 链接和高声明压缩比八类风险；四份配置 JSON 展示规则差异。发现风险时退出码 1 是正常结果。
 
 自己的 ZIP 可沿以下流程操作：
 
