@@ -21,6 +21,14 @@
   el('runtime').textContent=JSON.stringify({runtime:report.runtime,scanLimits:report.limits,extractionLimits:payload.extractLimits,contentVerified:report.contentVerified,localHeadersVerified:report.localHeadersVerified},null,2);
   const engineEvidence=node('details');engineEvidence.append(node('summary',t('引擎变换原因与整体诊断','Engine transformation reasons and archive diagnostics')),jsonBox({transformations:report.transformations,diagnostics:report.diagnostics.filter(d=>!d.entryIds.length)}));el('policy').append(engineEvidence);
   const decisions=new Map(draft.decisions.map(d=>[d.entryId,d]));let page=0;
+  const diagnosticsByEntry=new Map();
+  for(const diagnostic of report.diagnostics){
+    for(const id of diagnostic.entryIds){
+      if(!diagnosticsByEntry.has(id))diagnosticsByEntry.set(id,[]);
+      diagnosticsByEntry.get(id).push(diagnostic);
+    }
+  }
+  const diagnosticCodes=(entry,diagnostics)=>[...new Set([...entry.diagnosticIds,...diagnostics.map(d=>d.code)])];
   const dirty=()=>{el('edit-status').textContent=t('已修改 · 草稿尚未重验','Modified · draft not revalidated');};
   const select=(choices,value,onchange)=>{const s=node('select');for(const [v,label] of choices){const o=node('option',label);o.value=v;s.append(o);}s.value=value;s.addEventListener('change',()=>onchange(s.value));return s;};
   const field=(label,control)=>{const l=node('label');l.append(node('span',label),control);return l;};
@@ -32,7 +40,11 @@
   if(!report.collisionGroups.length)el('groups').append(node('p',t('当前配置无碰撞组','No collision groups for this policy')));
   for(const mapping of draft.directoryMappings){const input=node('input');input.value=mapping.targetPath;input.addEventListener('input',()=>{mapping.targetPath=input.value;dirty();});const row=field(mapping.nodeId,input);row.className='directory';el('directories').append(row);}
   const options=(id,choices)=>{for(const [v,label] of choices){const o=node('option',label);o.value=v;el(id).append(o);}el(id).addEventListener('change',()=>{page=0;render();});};
-  options('risk',[['all',t('全部','All')],['findings',t('有诊断','With diagnostics')],['blocked',t('安全阻断','Blocked')],['nonstandard',t('非标准','Nonstandard')]]);
+  options('risk',[
+    ['all',t('全部','All')],['findings',t('有诊断','With diagnostics')],
+    ['error',t('错误','Error')],['warning',t('警告','Warning')],['info',t('提示','Info')],
+    ['blocked',t('安全阻断','Blocked')],['nonstandard',t('非标准','Nonstandard')]
+  ]);
   options('kind',[['all',t('全部','All')],...['file','directory','symlink','special','contradictory'].map(v=>[v,v])]);
   options('collision',[['all',t('全部','All')],['yes',t('有碰撞','In collision')],['no',t('无碰撞','No collision')]]);
   const showEvidence=(entry,box)=>{
@@ -45,12 +57,23 @@
   };
   const render=()=>{
     const q=el('search').value.toLowerCase(),risk=el('risk').value,kind=el('kind').value,collision=el('collision').value;
-    const entries=report.entries.filter(e=>{const d=decisions.get(e.entryId),has=groupsByEntry.has(e.entryId);return (!q||[e.entryId,e.defaultDisplayName,d?.targetPath,...e.diagnosticIds].join(' ').toLowerCase().includes(q))&&(risk==='all'||risk==='findings'&&e.diagnosticIds.length||risk===e.nameState)&&(kind==='all'||kind===e.entryType)&&(collision==='all'||collision==='yes'&&has||collision==='no'&&!has);});
+    const entries=report.entries.filter(e=>{
+      const diagnostics=diagnosticsByEntry.get(e.entryId)??[];
+      const matchesSearch=!q||[
+        e.entryId,e.defaultDisplayName,decisions.get(e.entryId)?.targetPath,...diagnosticCodes(e,diagnostics)
+      ].join(' ').toLowerCase().includes(q);
+      const matchesRisk=risk==='all'||risk===e.nameState||(risk==='findings'&&(e.diagnosticIds.length>0||diagnostics.length>0))
+        ||diagnostics.some(d=>d.severity===risk);
+      const hasCollision=groupsByEntry.has(e.entryId);
+      return matchesSearch&&matchesRisk&&(kind==='all'||kind===e.entryType)
+        &&(collision==='all'||collision==='yes'&&hasCollision||collision==='no'&&!hasCollision);
+    });
     const pageSize=50,first=page*pageSize;el('entries').replaceChildren();
     el('count').textContent=t('匹配 ','Matches ')+entries.length+' · '+t('显示 ','Showing ')+(entries.length?first+1:0)+'–'+Math.min(first+pageSize,entries.length);
     for(const entry of entries.slice(first,first+pageSize)){
       const d=decisions.get(entry.entryId),box=node('article');box.className='entry';box.id=entry.entryId;
-      const heading=node('div');heading.className='entry-head';heading.append(node('h3',entry.entryId+' / '+(entry.defaultDisplayName??t('无法解码','Undecodable'))));const tag=node('span',entry.nameState+' · '+entry.entryType);tag.className='tag';heading.append(tag);box.append(heading,node('p',entry.diagnosticIds.join(' · ')));
+      const diagnostics=diagnosticsByEntry.get(entry.entryId)??[];
+      const heading=node('div');heading.className='entry-head';heading.append(node('h3',entry.entryId+' / '+(entry.defaultDisplayName??t('无法解码','Undecodable'))));const tag=node('span',entry.nameState+' · '+entry.entryType);tag.className='tag';heading.append(tag);box.append(heading,node('p',diagnosticCodes(entry,diagnostics).join(' · ')));
       if(d){const controls=node('div');controls.className='entry-controls';const input=node('input');input.value=d.targetPath??'';input.disabled=d.action==='skip';
         const action=select(['keep','rename','skip'].map(v=>[v,v]),d.action,v=>{d.action=v;d.targetPath=v==='skip'?null:input.value;input.disabled=v==='skip';dirty();});
         input.addEventListener('input',()=>{d.targetPath=input.value;d.action='rename';action.value='rename';dirty();});
@@ -59,7 +82,7 @@
         const confirmed=node('input');confirmed.type='checkbox';confirmed.checked=d.nameConfirmed;confirmed.addEventListener('change',()=>{d.nameConfirmed=confirmed.checked;dirty();});box.append(field(t('确认名称解释','Confirm name interpretation'),confirmed));
       }
       const details=node('details');details.append(node('summary',t('展开原始字节、候选与诊断','Expand raw bytes, candidates and diagnostics')));showEvidence(entry,details);
-      details.append(jsonBox(report.diagnostics.filter(d=>d.entryIds.includes(entry.entryId))));box.append(details);el('entries').append(box);
+      details.append(jsonBox(diagnostics));box.append(details);el('entries').append(box);
     }
     el('previous').disabled=page===0;el('next').disabled=first+pageSize>=entries.length;
   };
