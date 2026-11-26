@@ -6,7 +6,7 @@ English · [简体中文](README_ZH.md)
 
 [Try the workflow](#try-the-workflow) · [Policies](#policies-and-host-coverage) · [Development](#development-and-distributions)
 
-ArchivePreflight reviews ZIP filenames before extraction. It preserves original filename bytes and encoding candidates, explains Windows/macOS/Linux policy collisions, and produces an editable offline report. An explicit, revalidated plan enables bounded extraction into a new native-owned directory.
+ArchivePreflight reviews ZIP filenames before extraction. Its editable offline report preserves original filename bytes and encoding candidates, explains Windows/macOS/Linux policy collisions, and lets you filter entries by diagnostic severity. An explicit, revalidated plan enables bounded extraction into a new native-owned directory.
 
 ![Editable offline ZIP name report, using synthetic demo data](docs/images/report-desktop.png)
 
@@ -56,6 +56,8 @@ Policies are versioned comparison rules, with runtime Python/Unicode/zlib versio
 | UNC/network/reparse ancestors | Extraction fails closed |
 
 ## Offline evidence and extraction scope
+
+In the report’s **Risk** menu, choose **Error**, **Warning**, or **Info** to see entries with a diagnostic at that level. Combine it with a filename, diagnostic code, type, or collision filter. For example, searching for `DUPLICATE_DIRECTORY_METADATA` lists each explicit directory entry named in that finding.
 
 Preflight reads the bounded central directory and necessary EOCD/ZIP64 search windows. It reads no member streams, inflates no data and computes no body hash. A short ZIP's tail search window can physically overlap compressed bytes. `archiveId` binds metadata, while extraction verifies local headers, complete STORED/raw DEFLATE streams, actual sizes, CRC and output SHA-256.
 

@@ -6,7 +6,7 @@
 
 [开始使用](#从演示开始) · [配置与宿主](#配置与宿主范围) · [开发与构建](#开发与构建)
 
-ArchivePreflight 在解压前审阅 ZIP 文件名：保留原始字节和编码候选，解释 Windows、macOS、Linux 配置下的名称碰撞，生成可编辑的离线报告。明确接受完整重验后的计划，即可向新建的原生受控目录进行受限验证提取。
+ArchivePreflight 在解压前审阅 ZIP 文件名。可编辑的离线报告保留原始字节和编码候选，解释 Windows、macOS、Linux 配置下的名称碰撞，并支持按诊断严重程度筛选条目。明确接受完整重验后的计划，即可向新建的原生受控目录进行受限验证提取。
 
 ![合成演示数据生成的可编辑 ZIP 名称离线报告](docs/images/report-desktop.png)
 
@@ -50,6 +50,8 @@ archive-preflight extract sample.zip --plan .archive-preflight-local/validated.j
 报告记录配置版本和 Python／Unicode／zlib 版本。配置规则与原生 NTFS／APFS 比较表、Linux 特定挂载行为分别对待。Windows 本地 NTFS 有源码 CLI 与原生句柄实测；独立 exe 的真实验收见[支持矩阵](docs/SUPPORT.md)。Linux／macOS 原生提取仍等待对应宿主／CI 实际执行；网络路径及 reparse 祖先受控拒绝。
 
 ## 离线证据与提取边界
+
+在报告的“风险”菜单中选择“错误”“警告”或“提示”，即可查看含有对应级别诊断的条目。还能叠加名称、诊断代码、类型和碰撞条件。例如，搜索 `DUPLICATE_DIRECTORY_METADATA` 会列出同一目录的每条重复记录。
 
 预检读取有界中央目录与必要的 EOCD／ZIP64 尾窗口，不读取成员流、解压正文或计算正文 hash。短 ZIP 的必要尾搜索窗口可能物理重叠压缩字节。`archiveId` 绑定元数据；提取另核验 local、完整 STORED／raw DEFLATE、真实大小、CRC 和输出 SHA-256。
 
